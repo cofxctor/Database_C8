@@ -8,7 +8,7 @@ const atlas_string =
   "mongodb+srv://samarasuzi3_db_user:Thenew47@cluster0.iaalney.mongodb.net/first_db?appName=Cluster0";
 
 mongoose
-  .connect(compass_string)
+  .connect(atlas_string)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) =>
     console.error("An error occured during MongoDB connection: ", err),
