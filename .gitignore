@@ -1,3 +1,5 @@
 node_modules/
 index1.js
 .vscode/
+uploads/
+.env

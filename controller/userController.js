@@ -1,4 +1,5 @@
 const userModel = require("../model/userModel.js");
+const bcrypt = require("bcrypt");
 
 /**
 
@@ -19,11 +20,13 @@ const userModel = require("../model/userModel.js");
 const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const genSalt = await bcrypt.genSalt(10);
+    const encryptedPassword = await bcrypt.hash(password, genSalt);
 
     const user = await userModel.create({
       name,
       email,
-      password,
+      password : encryptedPassword,
     });
 
     res.status(201).json({
@@ -35,6 +38,36 @@ const createUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// USER LOGIN
+const userLogin = async (req, res) => {
+  const {email, password} = req.body;
+  try {
+        const user = await userModel.findOne({email});
+        if (!user) {
+          return res.status(404).json({
+            message : `No user with this email: ${email} found.`
+          });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+          return res.status(400).json({
+            message: 'Email or Provided password is incorrect. Please check again.'
+          })
+        }
+        return res.status(200).json({
+          message : "Login successful.",
+          data : user
+        });
+
+        }
+  } catch (error) {
+    return res.status(500).json({
+      message : error.message
+    });
+  }
+};
+
+
 
 // GENERAL GET;
 const getAllUsers = async (req, res) => {
@@ -160,4 +193,4 @@ const getUserProducts = async (req, res) => {
   }
 };
 
-module.exports = { createUser, updateUser, getAllUsers, getSingleUser, deleteUser, updateEntry, getUserProducts };
+module.exports = { createUser, updateUser, getAllUsers, getSingleUser, deleteUser, updateEntry, getUserProducts, userLogin };

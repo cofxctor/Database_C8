@@ -2,7 +2,7 @@
 
  const userRoute = express.Router();
 
- const { getAllUsers, createUser, deleteUser, getSingleUser, updateUser, updateEntry, getUserProducts } = require("../controller/userController.js");
+ const { getAllUsers, createUser, deleteUser, getSingleUser, updateUser, updateEntry, getUserProducts, userLogin } = require("../controller/userController.js");
 
  
 userRoute.get("/all-users", getAllUsers);
@@ -12,6 +12,7 @@ userRoute.delete("/delete-user/:userId", deleteUser);
 userRoute.patch("/update-user/:id", updateUser);
 userRoute.patch("/user-update/:userId", updateEntry);
 userRoute.get("/user-products/:id", getUserProducts);
+userRoute.get("login", userLogin);
 
 module.exports = userRoute;
 
